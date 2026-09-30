@@ -1,0 +1,11 @@
+name: 'databricks_poc'
+version: '1.0.0'
+config-version: 2
+
+profile: 'databricks_poc'
+
+model-paths: ["models"]
+
+models:
+  databricks_poc:
+    +materialized: view
