@@ -9,3 +9,4 @@ model-paths: ["models"]
 models:
   databricks_poc:
     +materialized: view
+ 
