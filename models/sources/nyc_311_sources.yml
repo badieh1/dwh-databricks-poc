@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: nyc_311
+    database: workspace
+    schema: dwh_poc
+
+    tables:
+      - name: nyc_311_initial
+      - name: nyc_311_update_1
