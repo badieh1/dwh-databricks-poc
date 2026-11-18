@@ -4,10 +4,13 @@
 WITH date_bounds AS (
 
     SELECT
-        MIN(CAST(created_date AS DATE)) AS start_date,
+        LEAST(
+            MIN(CAST(TRY_TO_TIMESTAMP(created_date, 'MM/dd/yyyy hh:mm:ss a') AS DATE)),
+            MIN(CAST(TRY_TO_TIMESTAMP(closed_date, 'MM/dd/yyyy hh:mm:ss a') AS DATE))
+        ) AS start_date,
         GREATEST(
-            MAX(CAST(created_date AS DATE)),
-            MAX(CAST(closed_date AS DATE))
+            MAX(CAST(TRY_TO_TIMESTAMP(created_date, 'MM/dd/yyyy hh:mm:ss a') AS DATE)),
+            MAX(CAST(TRY_TO_TIMESTAMP(closed_date, 'MM/dd/yyyy hh:mm:ss a') AS DATE))
         ) AS end_date
     FROM {{ ref('sat_service_request_v1') }}
     WHERE is_current = true
