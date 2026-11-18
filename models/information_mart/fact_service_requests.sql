@@ -3,7 +3,15 @@
 
 WITH current_requests AS (
 
-    SELECT *
+    SELECT
+        *,
+        TRY_TO_TIMESTAMP(
+            created_date, 'MM/dd/yyyy hh:mm:ss a'
+        ) AS created_timestamp,
+        TRY_TO_TIMESTAMP(
+            closed_date, 'MM/dd/yyyy hh:mm:ss a'
+        ) AS closed_timestamp
+
     FROM {{ ref('sat_service_request_v1') }}
     WHERE is_current = true
 
@@ -23,22 +31,22 @@ SELECT
 
     sha2(s.borough, 256) AS borough_key,
 
-    CAST(DATE_FORMAT(s.created_date, 'yyyyMMdd') AS INT)
+    CAST(DATE_FORMAT(s.created_timestamp, 'yyyyMMdd') AS INT)
         AS created_date_key,
 
-    HOUR(s.created_date) * 3600
-        + MINUTE(s.created_date) * 60
-        + SECOND(s.created_date) AS created_time_key,
+    HOUR(s.created_timestamp) * 3600
+        + MINUTE(s.created_timestamp) * 60
+        + SECOND(s.created_timestamp) AS created_time_key,
 
-    CAST(DATE_FORMAT(s.closed_date, 'yyyyMMdd') AS INT)
+    CAST(DATE_FORMAT(s.closed_timestamp, 'yyyyMMdd') AS INT)
         AS closed_date_key,
 
-    HOUR(s.closed_date) * 3600
-        + MINUTE(s.closed_date) * 60
-        + SECOND(s.closed_date) AS closed_time_key,
+    HOUR(s.closed_timestamp) * 3600
+        + MINUTE(s.closed_timestamp) * 60
+        + SECOND(s.closed_timestamp) AS closed_time_key,
 
-    s.created_date,
-    s.closed_date,
+    s.created_timestamp AS created_date,
+    s.closed_timestamp AS closed_date,
     s.status,
     1 AS request_count
 
